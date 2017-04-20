@@ -26,21 +26,19 @@ git checkout $TENSORFLOW_VERSION || exit 1
 export PYTHON_BIN_PATH=/usr/bin/python3
 export USE_DEFAULT_PYTHON_LIB_PATH=1
 
-export TF_NEED_CUDA=0
+export TF_NEED_CUDA=1
 
-## CUDA
-#export TF_NEED_CUDA=1
-#export GCC_HOST_COMPILER_PATH=/usr/bin/gcc
-#export TF_UNOFFICIAL_SETTING=1
-#export CUDA_TOOLKIT_PATH=/usr/local/cuda-8.0/
-## export CUDA_TOOLKIT_PATH=/usr/local/cuda-6.5/
-#export TF_CUDA_VERSION=$($CUDA_TOOLKIT_PATH/bin/nvcc --version | sed -n 's/^.*release \(.*\),.*/\1/p')
-#export TF_CUDA_COMPUTE_CAPABILITIES=3.2
-#
-## cuDNN
-## /usr/include/x86_64-linux-gnu/cudnn_v6.h
-#export CUDNN_INSTALL_PATH=/usr/lib/x86_64-linux-gnu/
-#export TF_CUDNN_VERSION=$(sed -n 's/^#define CUDNN_MAJOR\s*\(.*\).*/\1/p' /usr/include/x86_64-linux-gnu/cudnn_v6.h)
+# CUDA
+export GCC_HOST_COMPILER_PATH=/usr/bin/gcc
+export TF_UNOFFICIAL_SETTING=1
+export CUDA_TOOLKIT_PATH=/usr/local/cuda-6.5/
+export TF_CUDA_VERSION=$($CUDA_TOOLKIT_PATH/bin/nvcc --version | sed -n 's/^.*release \(.*\),.*/\1/p')
+export TF_CUDA_COMPUTE_CAPABILITIES=3.2     # TK1
+export _build_opts="--config=cuda"
+
+# cuDNN
+export CUDNN_INSTALL_PATH=/usr/local/cuda-6.5/
+export TF_CUDNN_VERSION=$(sed -n 's/^#define CUDNN_MAJOR\s*\(.*\).*/\1/p' $CUDNN_INSTALL_PATH/include/cudnn.h)
 
 # disable Google Cloud Platform support
 export TF_NEED_GCP=0
@@ -63,6 +61,8 @@ export HTTPS_PROXY=`echo $https_proxy | sed -e 's/\/$//'`
 ########################################
 
 ./configure
+
+BAZEL_FLAGS="$BAZEL_FLAGS -c opt ${_build_opts} --copt=${CC_OPT_FLAGS}"
 
 echo "launching bazel with flags '$BAZEL_FLAGS'"
 
