@@ -8,7 +8,7 @@ if [ -z $TENSORFLOW_VERSION ]
 then
 	echo "usage: $0 <tensorflow tag/commit>"
 	exit
-fi 
+fi
 
 mkdir $BUILD_DIR
 
@@ -24,5 +24,4 @@ yes ''|./configure || exit 1
 
 echo "launching bazel with flags '$BAZEL_FLAGS'"
 
-bazel build $BAZEL_FLAGS tensorflow:libtensorflow.so --verbose_failures
-
+bazel build $BAZEL_FLAGS //tensorflow/tools/pip_package:build_pip_package --verbose_failures
