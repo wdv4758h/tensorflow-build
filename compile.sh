@@ -31,13 +31,13 @@ export TF_NEED_CUDA=1
 # CUDA
 export GCC_HOST_COMPILER_PATH=/usr/bin/gcc
 export TF_UNOFFICIAL_SETTING=1
-export CUDA_TOOLKIT_PATH=/usr/local/cuda-6.5/
+export CUDA_TOOLKIT_PATH=/usr/local/cuda-8.0/
 export TF_CUDA_VERSION=$($CUDA_TOOLKIT_PATH/bin/nvcc --version | sed -n 's/^.*release \(.*\),.*/\1/p')
 export TF_CUDA_COMPUTE_CAPABILITIES=3.2     # TK1
 export _build_opts="--config=cuda"
 
 # cuDNN
-export CUDNN_INSTALL_PATH=/usr/local/cuda-6.5/
+export CUDNN_INSTALL_PATH=/usr/local/cuda-8.0/
 export TF_CUDNN_VERSION=$(sed -n 's/^#define CUDNN_MAJOR\s*\(.*\).*/\1/p' $CUDNN_INSTALL_PATH/include/cudnn.h)
 
 # disable Google Cloud Platform support
